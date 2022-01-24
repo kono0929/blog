@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
+use App\Models\Post;
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +44,143 @@ use Illuminate\Support\Facades\Route;
 // }));
 
 //Route::resource('posts', [PostController::class, '']); 
-Route::resource('posts', PostController::class);
-Route::get('/contact', [PostController::class, 'contact']); 
-Route::get('/post/{id}/{name}/{job}', [PostController::class, 'show_post']); 
+// Route::resource('posts', PostController::class);
+// Route::get('/contact', [PostController::class, 'contact']); 
+// Route::get('/post/{id}/{name}/{job}', [PostController::class, 'show_post']); 
+
+// Route::get('/insert', function(){
+//     DB::insert('insert into posts (title, body, is_admin) values (?, ?, ?)', ['PHP test3', 'Laravel is cool framework yayyy!!!', 1]);
+// });
+
+// Route::get('/read', function(){
+//     $results = DB::select('select * from posts');
+//     //return $results;
+//     return $results[0]->title;
+//     // foreach($results as $post){
+//     //     return $post -> title;
+//     // }
+//     //return var_dump($results);
+// });
+
+// Route::get('/update', function(){
+//     $updated = DB::update('update posts set title = "Updated second title" where id = ?', [2]);
+//     return $updated;
+// });
+
+// Route::get('/delete', function(){
+//     $deleted = DB::delete('delete from posts where id = ?', [3]);
+//     return $deleted;
+// });
+/*
+|--------------------------------------------------------------------------
+| ELOQUENT
+|--------------------------------------------------------------------------
+|
+*/
+
+// Route::get('/read', function(){
+//     $posts = Post::all();
+//     foreach($posts as $post){
+//         return $post->title;
+//     }
+// });
+// Route::get('/find', function(){
+//     $post = Post::find(3);
+//     $post->title = 'this is eloquent title updated!';
+//     $post->save();
+//         return $post->title;
+// });
+// Route::get('/findwhere', function(){
+//     $post = Post::where('id', 1)->orderBy('id', 'desc')->take(1)->get();
+//         return $post;
+// });
+
+// Route::get('/findMore', function(){
+//     $post = Post::findOrFail(4);
+//         return $post;
+
+//     $post = Post::where('id', '>', 50)->firstOrFail();
+//     return $post;
+// });
+
+Route::get('/basicInsert', function(){
+
+    $post = new Post;
+    $post->user_id = '2';
+    $post->title = 'bbbbbbbb';
+    $post->body = 'bbbbbbbbbbbbbb';
+
+    $post->save();
+
+});
+
+// Route::get('/create', function(){
+
+//     Post::create(['title'=>'the create method', 'body'=>'wow I\'m learning a lot with Edwin Diaz','is_admin'=>0]);
+// });
+
+// Route::get('/update', function(){
+
+//     Post::where('is_admin', '0')->update(['title'=>'Admin update method', 'body'=>'Why am I tired all the time?']);
+// });
+
+// Route::get('/delete', function(){
+
+//     $post = Post::find(2);
+//     $post->delete();
+// });
+
+// Route::get('delete2', function(){
+
+//     Post::destroy([3,5]);
+//     //$post = Post::where('id', 3)->delete();
+// });
+
+Route::get('/softdelete', function(){
+    Post::find(2)->delete();
+});
+
+// Route::get('/softread', function(){
+//     $posts = Post::onlyTrashed()->forceDelete();
+//     return $posts;
+// });
+
+Route::get('/restore', function(){
+    $posts = Post::onlyTrashed()->restore();
+    return $posts;
+});
+
+Route::get('/forceDelete', function(){
+    $posts = Post::onlyTrashed()->forceDelete();
+    return $posts;
+});
+
+/*
+|--------------------------------------------------------------------------
+| ELOQUENT RELATIONSHIPS
+|--------------------------------------------------------------------------
+|
+*/
+
+// One to One relashionship
+Route::get('/user/{id}/post', function($id){
+
+    return User::find($id)->post->title;
+});
+
+Route::get('/post/{id}/user', function($id){
+
+    return Post::find($id)->user->name;
+});
+
+// One to Many relashionship
+
+Route::get('/posts', function(){
+
+    $user = User::find(1);
+
+    foreach ($user->posts as $post){
+
+        echo $post->title.'<br>';
+    }
+});
