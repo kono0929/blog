@@ -4,6 +4,7 @@ use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Country;
 
 /*
 |--------------------------------------------------------------------------
@@ -162,25 +163,64 @@ Route::get('/forceDelete', function(){
 |
 */
 
-// One to One relashionship
-Route::get('/user/{id}/post', function($id){
+// One to One relationship
+// Route::get('/user/{id}/post', function($id){
 
-    return User::find($id)->post->title;
-});
+//     return User::find($id)->post->title;
+// });
 
-Route::get('/post/{id}/user', function($id){
+// Route::get('/post/{id}/user', function($id){
 
-    return Post::find($id)->user->name;
-});
+//     return Post::find($id)->user->name;
+// });
 
-// One to Many relashionship
+// // One to Many relationship
 
-Route::get('/posts', function(){
+// Route::get('/posts', function(){
+
+//     $user = User::find(1);
+
+//     foreach ($user->posts as $post){
+
+//         echo $post->title.'<br>';
+//     }
+// });
+
+// many to many relationships
+
+// Route::get('/user/{id}/roles', function($id){
+
+//     $user = User::find($id)->roles()->orderby('id', 'desc')->get();
+//     return $user;
+
+//     // foreach ($user->roles as $role)
+//     // return $role->name;
+// });
+
+// Route::get('/roles/{id}/users', function($id){
+
+//     $user = User::find($id)->roles()->orderby('id', 'desc')->get();
+//     return $user;
+
+//     // foreach ($user->roles as $role)
+//     // return $role->name;
+// });
+
+Route::get('roles/pivot', function(){
 
     $user = User::find(1);
+    foreach($user->roles as $role){
+        return $role->pivot;
+    }
 
-    foreach ($user->posts as $post){
+});
 
+Route::get('/user/country', function(){
+
+    $country = Country::find(4);
+    //return  $country->posts->title;
+
+    foreach ($country->posts as $post){
         echo $post->title.'<br>';
     }
 });
