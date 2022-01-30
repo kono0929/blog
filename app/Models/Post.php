@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
+use App\Models\Photo;
+use App\Models\Tag;
 
 class Post extends Model
 {
@@ -15,7 +17,7 @@ class Post extends Model
     // protected $table = 'posts';
 
     protected $fillable = [
-
+        'user_id',
         'title',
         'body'
 
@@ -25,5 +27,17 @@ class Post extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the post's photo.
+     */
+    public function photos()
+    {
+        return $this->morphMany(Photo::class, 'imageable');
+    }
+
+    public function tags(){
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }

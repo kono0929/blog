@@ -10,7 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use App\Models\Post;
 use App\Models\Role;
-use App\Models\Country;
+use App\Models\Photo;
 
 class User extends Authenticatable
 {
@@ -58,9 +58,9 @@ class User extends Authenticatable
      * This refers to this class
      * one to many relationships
      */
-    // public function posts(){
-    //     return $this->hasMany(Post::class);
-    // }
+    public function posts(){
+        return $this->hasMany(Post::class, 'user_id');
+    }
 
     /**
      * make sure you let the model know that you want to pull out that intermediate table from a column.
@@ -69,6 +69,16 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class)->withPivot('created_at');
     }
+
+    /**
+     * Get the user's photo.
+     */
+    public function photos()
+    {
+        return $this->morphMany(Photo::class, 'imageable');
+    }
+
 }
+
 
 

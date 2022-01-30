@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Models\User;
 use App\Models\Country;
+use App\Models\Photo;
+use App\Models\Video;
+use App\Models\Tag;
 
 /*
 |--------------------------------------------------------------------------
@@ -104,20 +107,20 @@ use App\Models\Country;
 //     return $post;
 // });
 
-Route::get('/basicInsert', function(){
+// Route::get('/basicInsert', function(){
 
-    $post = new Post;
-    $post->user_id = '2';
-    $post->title = 'bbbbbbbb';
-    $post->body = 'bbbbbbbbbbbbbb';
+//     $post = new Post;
+//     $post->user_id = '2';
+//     $post->title = 'bbbbbbbb';
+//     $post->body = 'bbbbbbbbbbbbbb';
 
-    $post->save();
+//     $post->save();
 
-});
+// });
 
 // Route::get('/create', function(){
 
-//     Post::create(['title'=>'the create method', 'body'=>'wow I\'m learning a lot with Edwin Diaz','is_admin'=>0]);
+//     Post::create(['user_id'=>'1', 'title'=>'the create method', 'body'=>'wow I\'m learning a lot with Edwin Diaz','is_admin'=>0]);
 // });
 
 // Route::get('/update', function(){
@@ -222,5 +225,60 @@ Route::get('/user/country', function(){
 
     foreach ($country->posts as $post){
         echo $post->title.'<br>';
+    }
+});
+
+// Polymorphic Relations
+
+Route::get('/user/photo', function(){
+
+    $user = User::find(1);
+
+    foreach($user->photos as $photo){
+
+        return $photo->path;
+    }
+});
+
+Route::get('/post/{id}/photo', function($id){
+
+    $post = Post::find($id);
+
+    foreach($post->photos as $photo){
+
+        echo $photo->path.'<br>';
+    }
+});
+
+Route::get('/photo/{id}/post', function($id){
+
+    $photo = Photo::findOrFail($id);
+
+    return $photo->imageable;
+});
+
+Route::get('/post/tag', function(){
+    $post = Post::find(1);
+
+    foreach($post->tags as $tag){
+        return $tag->name;
+    }
+});
+
+Route::get('/video/tag', function(){
+    $video = Video::find(2);
+
+    foreach($video->tags as $tag){
+        return $tag->name;
+    }
+});
+
+Route::get('/tag/post', function(){
+
+    $tag = Tag::find(2);
+
+    foreach($tag -> posts as $post){
+
+        return $post->title;
     }
 });
