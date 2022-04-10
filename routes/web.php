@@ -140,145 +140,155 @@ use App\Models\Tag;
 //     //$post = Post::where('id', 3)->delete();
 // });
 
-Route::get('/softdelete', function(){
-    Post::find(2)->delete();
-});
+// Route::get('/softdelete', function(){
+//     Post::find(2)->delete();
+// });
 
-// Route::get('/softread', function(){
+// // Route::get('/softread', function(){
+// //     $posts = Post::onlyTrashed()->forceDelete();
+// //     return $posts;
+// // });
+
+// Route::get('/restore', function(){
+//     $posts = Post::onlyTrashed()->restore();
+//     return $posts;
+// });
+
+// Route::get('/forceDelete', function(){
 //     $posts = Post::onlyTrashed()->forceDelete();
 //     return $posts;
 // });
 
-Route::get('/restore', function(){
-    $posts = Post::onlyTrashed()->restore();
-    return $posts;
-});
+// /*
+// |--------------------------------------------------------------------------
+// | ELOQUENT RELATIONSHIPS
+// |--------------------------------------------------------------------------
+// |
+// */
 
-Route::get('/forceDelete', function(){
-    $posts = Post::onlyTrashed()->forceDelete();
-    return $posts;
-});
+// // One to One relationship
+// // Route::get('/user/{id}/post', function($id){
 
-/*
-|--------------------------------------------------------------------------
-| ELOQUENT RELATIONSHIPS
-|--------------------------------------------------------------------------
-|
-*/
+// //     return User::find($id)->post->title;
+// // });
 
-// One to One relationship
-// Route::get('/user/{id}/post', function($id){
+// // Route::get('/post/{id}/user', function($id){
 
-//     return User::find($id)->post->title;
-// });
+// //     return Post::find($id)->user->name;
+// // });
 
-// Route::get('/post/{id}/user', function($id){
+// // // One to Many relationship
 
-//     return Post::find($id)->user->name;
-// });
+// // Route::get('/posts', function(){
 
-// // One to Many relationship
+// //     $user = User::find(1);
 
-// Route::get('/posts', function(){
+// //     foreach ($user->posts as $post){
+
+// //         echo $post->title.'<br>';
+// //     }
+// // });
+
+// // many to many relationships
+
+// // Route::get('/user/{id}/roles', function($id){
+
+// //     $user = User::find($id)->roles()->orderby('id', 'desc')->get();
+// //     return $user;
+
+// //     // foreach ($user->roles as $role)
+// //     // return $role->name;
+// // });
+
+// // Route::get('/roles/{id}/users', function($id){
+
+// //     $user = User::find($id)->roles()->orderby('id', 'desc')->get();
+// //     return $user;
+
+// //     // foreach ($user->roles as $role)
+// //     // return $role->name;
+// // });
+
+// Route::get('roles/pivot', function(){
 
 //     $user = User::find(1);
+//     foreach($user->roles as $role){
+//         return $role->pivot;
+//     }
 
-//     foreach ($user->posts as $post){
+// });
 
+// Route::get('/user/country', function(){
+
+//     $country = Country::find(4);
+//     //return  $country->posts->title;
+
+//     foreach ($country->posts as $post){
 //         echo $post->title.'<br>';
 //     }
 // });
 
-// many to many relationships
+// // Polymorphic Relations
 
-// Route::get('/user/{id}/roles', function($id){
+// Route::get('/user/photo', function(){
 
-//     $user = User::find($id)->roles()->orderby('id', 'desc')->get();
-//     return $user;
+//     $user = User::find(1);
 
-//     // foreach ($user->roles as $role)
-//     // return $role->name;
+//     foreach($user->photos as $photo){
+
+//         return $photo->path;
+//     }
 // });
 
-// Route::get('/roles/{id}/users', function($id){
+// Route::get('/post/{id}/photo', function($id){
 
-//     $user = User::find($id)->roles()->orderby('id', 'desc')->get();
-//     return $user;
+//     $post = Post::find($id);
 
-//     // foreach ($user->roles as $role)
-//     // return $role->name;
+//     foreach($post->photos as $photo){
+
+//         echo $photo->path.'<br>';
+//     }
 // });
 
-Route::get('roles/pivot', function(){
+// Route::get('/photo/{id}/post', function($id){
 
-    $user = User::find(1);
-    foreach($user->roles as $role){
-        return $role->pivot;
-    }
+//     $photo = Photo::findOrFail($id);
 
-});
+//     return $photo->imageable;
+// });
 
-Route::get('/user/country', function(){
+// Route::get('/post/tag', function(){
+//     $post = Post::find(1);
 
-    $country = Country::find(4);
-    //return  $country->posts->title;
+//     foreach($post->tags as $tag){
+//         return $tag->name;
+//     }
+// });
 
-    foreach ($country->posts as $post){
-        echo $post->title.'<br>';
-    }
-});
+// Route::get('/video/tag', function(){
+//     $video = Video::find(2);
 
-// Polymorphic Relations
+//     foreach($video->tags as $tag){
+//         return $tag->name;
+//     }
+// });
 
-Route::get('/user/photo', function(){
+// Route::get('/tag/post', function(){
 
-    $user = User::find(1);
+//     $tag = Tag::find(2);
 
-    foreach($user->photos as $photo){
+//     foreach($tag -> posts as $post){
 
-        return $photo->path;
-    }
-});
+//         return $post->title;
+//     }
+// });
 
-Route::get('/post/{id}/photo', function($id){
 
-    $post = Post::find($id);
+/*
+|--------------------------------------------------------------------------
+| CRUDE APPLICATIONS
+|--------------------------------------------------------------------------
+|
+*/
 
-    foreach($post->photos as $photo){
-
-        echo $photo->path.'<br>';
-    }
-});
-
-Route::get('/photo/{id}/post', function($id){
-
-    $photo = Photo::findOrFail($id);
-
-    return $photo->imageable;
-});
-
-Route::get('/post/tag', function(){
-    $post = Post::find(1);
-
-    foreach($post->tags as $tag){
-        return $tag->name;
-    }
-});
-
-Route::get('/video/tag', function(){
-    $video = Video::find(2);
-
-    foreach($video->tags as $tag){
-        return $tag->name;
-    }
-});
-
-Route::get('/tag/post', function(){
-
-    $tag = Tag::find(2);
-
-    foreach($tag -> posts as $post){
-
-        return $post->title;
-    }
-});
+Route::resource('/posts', PostController::class);

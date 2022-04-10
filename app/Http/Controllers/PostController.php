@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Post;
 
 class PostController extends Controller
 {
@@ -11,9 +12,11 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($id)
+    public function index()
     {
-        return "it is working: ". $id;
+        //return "it is working: ". $id;
+        $posts = Post::all();
+        return view('posts.index', compact('posts'));
     }
 
     /**
@@ -23,7 +26,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return "I am the method of create";
+        return view('posts.create');
+        //return "I am the method of create :)";
     }
 
     /**
@@ -34,7 +38,18 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //return $request->all();
+        //return $request->input('title');
+        // $input['title'] = $request->title;
+        // $post = new Post;
+        // $post-> title = $request->title;
+        //$post->save();
+        $post = new Post;
+        $post->user_id = '1';
+        $post-> title = $request->title;
+        $post->save();
+        return redirect('/posts');
+        //Post::create($request->all() );
     }
 
     /**
@@ -45,7 +60,10 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        return "THIS IS WORKING YAY!!!". $id;
+        //return "THIS IS WORKING YAY!!!". $id;
+        $post = Post::findOrFail($id);
+        
+       return view('posts.show' ,compact('post'));
     }
 
     /**
@@ -57,6 +75,9 @@ class PostController extends Controller
     public function edit($id)
     {
         //
+        $post = Post::findOrFail($id);
+        
+        return view('posts.edit' ,compact('post'));
     }
 
     /**
@@ -69,6 +90,9 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $post = Post::findOrFail($id);
+        $post->update($request->all());
+        return redirect('/posts');
     }
 
     /**
@@ -80,6 +104,9 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+        $post = Post::findOrFail($id);
+        $post->delete();
+        return redirect('/posts');
     }
 
     public function contact()
